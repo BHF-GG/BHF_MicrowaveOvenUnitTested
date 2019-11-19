@@ -29,7 +29,7 @@ namespace Microwave.Test.Integration
         public void Display_ShowTimeOutputsExpected(int min, int sec, string expected)
         {
             _sut.ShowTime(min,sec);
-            _output.OutputLine(Arg.Is<string>(str => str.Contains(expected)));
+           
         }
 
         [TestCase(2,"2")]

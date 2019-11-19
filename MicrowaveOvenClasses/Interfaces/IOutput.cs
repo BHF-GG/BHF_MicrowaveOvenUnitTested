@@ -8,6 +8,7 @@ namespace MicrowaveOvenClasses.Interfaces
 {
     public interface IOutput
     {
+        string OutTextTest { get; }
         void OutputLine(string line);
     }
 }
