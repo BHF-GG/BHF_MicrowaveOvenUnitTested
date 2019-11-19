@@ -18,7 +18,7 @@ namespace Microwave.Test.Unit
         private IDoor door;
 
         private IDisplay display;
-        private ILight light;
+        private ILight light; 
 
         private ICookController cooker;
 
