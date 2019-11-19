@@ -62,6 +62,7 @@
     <Compile Include="IT2.cs" />
     <Compile Include="IT3_PowerTube.cs" />
     <Compile Include="IT4_CookController.cs" />
+    <Compile Include="IT5_UserInterface.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

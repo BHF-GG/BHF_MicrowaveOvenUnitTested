@@ -4,9 +4,10 @@ namespace MicrowaveOvenClasses.Boundary
 {
     public class Output : IOutput
     {
-        public void OutputLine(string line)
+        public string OutputLine(string line)
         {
             System.Console.WriteLine(line);
+            return line;
         }
     }
 }
