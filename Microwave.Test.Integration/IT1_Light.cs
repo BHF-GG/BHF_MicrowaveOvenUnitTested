@@ -29,7 +29,7 @@ namespace Microwave.Test.Integration
         public void LightTurnsOn_WasOff_CorrectOutPutString()
         {
             _sut.TurnOn();
-            _output.OutputLine(Arg.Is<string>(str => str.Contains("on")));
+            Assert.That(_output.OutTextTest.Contains("Light is turned on"));
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace Microwave.Test.Integration
             _sut.TurnOff();
             
 
-            _output.OutputLine(_output.Contains("jafbdasl")==true);
+           // _output.OutputLine(_output.Contains("jafbdasl")==true);
         }
     }
 }

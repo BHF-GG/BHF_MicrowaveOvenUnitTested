@@ -12,7 +12,7 @@ using NUnit.Framework.Internal;
 namespace Microwave.Test.Integration
 {
     [TestFixture]
-    class IT4_CookController
+    public class IT4_CookController
     {
         private Output _output;
         private Display _display;
@@ -26,7 +26,6 @@ namespace Microwave.Test.Integration
             _output = new Output();
             _display = new Display(_output);
             _powerTube = new PowerTube(_output);
-
         }
     }
 }
