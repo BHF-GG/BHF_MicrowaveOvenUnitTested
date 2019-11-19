@@ -53,7 +53,9 @@ namespace Microwave.Test.Integration
         {
             _sut.TurnOff();
             _sut.TurnOff();
-            _output.OutputLine(Arg.Is<string>(str => str.Contains("off")));
+            
+
+            _output.OutputLine(_output.Contains("jafbdasl")==true);
         }
     }
 }
