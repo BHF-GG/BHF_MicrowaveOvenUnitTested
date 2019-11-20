@@ -12,33 +12,26 @@ namespace Microwave.Test.Integration
 {
     public class IT3_PowerTube
     {
-        private PowerTube _sut;
-        private IOutput _ouput;
+        private PowerTube _powerTube;
+        private IOutput _output;
 
         [SetUp]
         public void SetUp()
         {
-            _ouput = new Output();
-            _sut = new PowerTube(_ouput);
+            _output = new Output();
+            _powerTube = new PowerTube(_output);
 
         }
 
         [Test]
         public void TurnOff_WasOn_CorrectOutput()
         {
-            _sut.TurnOn(50);
-            _sut.TurnOff();
-            _ouput.OutputLine(Arg.Is<string>(str => str.Contains("daV")));
+            _powerTube.TurnOn(50);
+            _powerTube.TurnOff();
+
+            Assert.That(_output.OutTextTest,Is.EqualTo("PowerTube turned off"));
         }
 
-        [Test]
-        public void TurnOff_WasOn_CorrectOutputto()
-        {
-            _sut.TurnOn(50);
-            _sut.TurnOff();
-            _ouput.OutputLine(Arg.Is<string>(str => str.Contains("daV")));
-
-
-        }
+   
     }
 }
