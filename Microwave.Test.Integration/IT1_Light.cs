@@ -21,7 +21,7 @@ namespace Microwave.Test.Integration
         public void SetUp()
         {
             //Testing with a concrete object instead of Substitute
-            _output = new Output();
+            _output = Substitute.For<Output>();
             _sut = new Light(_output);
         }
 
@@ -29,7 +29,10 @@ namespace Microwave.Test.Integration
         public void LightTurnsOn_WasOff_CorrectOutPutString()
         {
             _sut.TurnOn();
-            Assert.That(_output.OutTextTest.Contains("Light is turned on"));
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Light is turned on"));
         }
 
         [Test]
@@ -37,7 +40,10 @@ namespace Microwave.Test.Integration
         {
             _sut.TurnOn();
             _sut.TurnOff();
-            _output.OutputLine(Arg.Is<string>(str => str.Contains("off")));
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Light is turned off"));
         }
 
         [Test]
@@ -45,17 +51,23 @@ namespace Microwave.Test.Integration
         {
             _sut.TurnOn();
             _sut.TurnOn();
-            _output.OutputLine(Arg.Is<string>(str => str.Contains("on")));
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Light is turned on"));
         }
 
         [Test]
-        public void TurnOf_WasOff_CorrectOutput()
+        public void TurnOff_WasOff_CorrectOutput()
         {
+            //Have to turn on, and then turn off twice to check this - because isOn (boolean) is set to false at start
+            _sut.TurnOn();
             _sut.TurnOff();
             _sut.TurnOff();
-            
 
-           // _output.OutputLine(_output.Contains("jafbdasl")==true);
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Light is turned off"));
         }
     }
 }
