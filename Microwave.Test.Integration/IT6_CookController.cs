@@ -11,14 +11,17 @@ using NUnit.Framework;
 
 namespace Microwave.Test.Integration
 {
+    [TestFixture]
     public class IT6_CookController
     {
         private CookController _sut;
         private IUserInterface _userInterface;
         private IOutput _output;
         private Display _display;
-        private Button _fakeButton;
-        private Door _fakeDoor;
+        private IButton _powerButton;
+        private IButton _timeButton;
+        private IButton _startCancelButton;
+        private IDoor _fakeDoor;
         private Light _light;
         private PowerTube _powerTube;
         private ITimer _timer;
@@ -26,24 +29,29 @@ namespace Microwave.Test.Integration
         [SetUp]
         public void SetUp()
         {
-            _output = new Output();
-            _fakeButton = Substitute.For<Button>();
-            _fakeDoor = Substitute.For<Door>();
+            _output = Substitute.For<IOutput>();
+            _powerButton = Substitute.For<IButton>();
+            _timeButton = Substitute.For<IButton>();
+            _startCancelButton = Substitute.For<IButton>();
+            _fakeDoor = Substitute.For<IDoor>();
             _display = new Display(_output);
             _powerTube = new PowerTube(_output);
-            _timer = Substitute.For<Timer>();
+            _timer = Substitute.For<ITimer>();
             _sut = new CookController(_timer,_display,_powerTube);
             _userInterface =
-                new UserInterface(_fakeButton, _fakeButton,
-                    _fakeButton, _fakeDoor, _display, _light, _sut);
+                new UserInterface(_powerButton, _timeButton,
+                    _startCancelButton, _fakeDoor, _display, _light, _sut);
         }
 
         [Test]
         public void OnTimeExpiredOutputsCorrect()
         {
+            _powerButton.Pressed += Raise.EventWith(this,EventArgs.Empty);
+            _timeButton.Pressed += Raise.EventWith(this,EventArgs.Empty);
+            _startCancelButton.Pressed += Raise.EventWith(this,EventArgs.Empty);
             _sut.StartCooking(2,2);
-            _timer.Expired += Raise.EventWith(EventArgs.Empty);
-            Assert.That(_output.OutTextTest,Is.EqualTo(""));
+            _timer.Expired += Raise.EventWith(this,EventArgs.Empty);
+            _output.Received().OutputLine(Arg.Is<string>(x=> x == "Light is turned off"));
         }
     }
 }

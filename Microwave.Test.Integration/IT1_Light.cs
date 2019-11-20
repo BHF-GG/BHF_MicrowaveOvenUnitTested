@@ -21,7 +21,7 @@ namespace Microwave.Test.Integration
         public void SetUp()
         {
             //Testing with a concrete object instead of Substitute
-            _output = Substitute.For<Output>();
+            _output = Substitute.For<IOutput>();
             _sut = new Light(_output);
         }
 
