@@ -64,6 +64,7 @@
     <Compile Include="IT5_UserInterface.cs" />
     <Compile Include="IT2_Display.cs" />
     <Compile Include="IT7_Door.cs" />
+    <Compile Include="IT9_Timer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
