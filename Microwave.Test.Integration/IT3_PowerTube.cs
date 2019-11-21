@@ -54,7 +54,6 @@ namespace Microwave.Test.Integration
                 consoleOutput = stringWriter.ToString();
             }
 
-
             Assert.That(consoleOutput, Is.EqualTo("PowerTube works with 50 %\r\nPowerTube turned off\r\n"));
         }
 
