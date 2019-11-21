@@ -16,13 +16,13 @@ namespace Microwave.Test.Integration
     public class IT1_Light
     {
         private Light _sut;
-        private IOutput _output;
+        private Output _output;
 
         [SetUp]
         public void SetUp()
         {
             //Testing with a concrete object instead of Substitute
-            _output = Substitute.For<IOutput>();
+            _output = new Output();
             _sut = new Light(_output);
         }
 
