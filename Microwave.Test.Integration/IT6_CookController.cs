@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using MicrowaveOvenClasses.Boundary;
 using MicrowaveOvenClasses.Controllers;
 using MicrowaveOvenClasses.Interfaces;
@@ -25,7 +26,7 @@ namespace Microwave.Test.Integration
         [SetUp]
         public void SetUp()
         {
-            output = Substitute.For<IOutput>();
+            output = new Output();
             powerButton = Substitute.For<IButton>();
             timeButton = Substitute.For<IButton>();
             startCancelButton = Substitute.For<IButton>();
@@ -53,12 +54,21 @@ namespace Microwave.Test.Integration
         [Test]
         public void OnTimeExpiredOutputsCorrect()
         {
-            powerButton.Pressed += Raise.EventWith(this,EventArgs.Empty);
-            timeButton.Pressed += Raise.EventWith(this,EventArgs.Empty);
-            startCancelButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
-            //_sut.StartCooking(2,2);
-            timer.Expired += Raise.EventWith(this, EventArgs.Empty);
-            output.Received().OutputLine(Arg.Is<string>(x=> x == "Light is turned off"));
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
+
+                powerButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
+                timeButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
+                startCancelButton.Pressed += Raise.EventWith(this, EventArgs.Empty);
+                //_sut.StartCooking(2,2);
+                timer.Expired += Raise.EventWith(this, EventArgs.Empty);
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput.Contains("Light is turned off\r\n"));
         }
     }
 }
