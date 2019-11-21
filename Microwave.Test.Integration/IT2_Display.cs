@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,38 +20,55 @@ namespace Microwave.Test.Integration
         [SetUp]
         public void SetUp()
         {
-            _output = Substitute.For<IOutput>();
+            _output = new Output();
             _sut = new Display(_output);
         }
 
-        [TestCase(2,10,"02:10")]
-        [TestCase(-2, -10, "-02:-10")]
-        [TestCase(1000, -1000, "1000:-1000")]
-        public void Display_ShowTimeOutputsExpected(int min, int sec, string expected)
+        [Test]
+        public void Display_ShowTimeOutputsExpected()
         {
-            _sut.ShowTime(min,sec);
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Display shows: " + expected));
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
+
+                _sut.ShowTime(2, 10);
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("Display shows: 02:10\r\n"));
 
         }
 
-        [TestCase(2,"2")]
-        [TestCase(-2,"-2")]
-        [TestCase(1000,"1000")]
-        public void ShowPowerOutputsExpected(int power,string expected)
+        [Test]
+        public void ShowPowerOutputsExpected()
         {
-            _sut.ShowPower(power);
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Display shows: " + expected + " W"));
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
+                _sut.ShowPower(2);
+
+                consoleOutput = stringWriter.ToString();
+            }
+            Assert.That(consoleOutput, Is.EqualTo("Display shows: 2 W\r\n"));
         }
 
         [Test]
         public void ClearDisplaysCorrectString()
         {
-            _sut.Clear();
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Display cleared"));
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
+
+                _sut.Clear();
+
+                consoleOutput = stringWriter.ToString();
+            }
+            Assert.That(consoleOutput, Is.EqualTo("Display cleared\r\n"));
         }
     }
 }

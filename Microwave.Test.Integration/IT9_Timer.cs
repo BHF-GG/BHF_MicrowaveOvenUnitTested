@@ -8,63 +8,71 @@ using MicrowaveOvenClasses.Controllers;
 using MicrowaveOvenClasses.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
-using NUnit.Framework.Internal;
 
 namespace Microwave.Test.Integration
 {
     [TestFixture]
-    class IT7_Door
+    class IT9_Timer
     {
-        private Door _sut;
+        private Timer _sut;
 
         private IOutput _output;
-        private ITimer _timer;
         private PowerTube _powerTube;
         private Display _display;
         private Light _light;
         private CookController _cookController;
-        private IButton _powerButton;
-        private IButton _timeButton;
-        private IButton _startButton;
         private UserInterface _ui;
+        private Button _powerButton;
+        private Button _timeButton;
+        private Button _startButton;
+        private Door _door;
 
         [SetUp]
         public void Setup()
         {
-            _sut = new Door();
+            _sut = new Timer();
 
             _output = Substitute.For<IOutput>();
-            _timer = Substitute.For<Timer>();
             _powerTube = new PowerTube(_output);
             _display = new Display(_output);
             _light = new Light(_output);
-            _cookController = new CookController(_timer, _display, _powerTube);
+            _door = new Door();
             _powerButton = new Button();
             _timeButton = new Button();
             _startButton = new Button();
+            _cookController = new CookController(_sut, _display, _powerTube);
 
-            _ui = new UserInterface(_powerButton, _timeButton, _startButton, _sut, _display, _light, _cookController);
+            _ui = new UserInterface(_powerButton, _timeButton, _startButton, _door, _display, _light, _cookController);
+
         }
 
         [Test]
-        public void UserInterface_DoorOpens_TurnOnLightOutput()
+        public void CookController_StartCooking_LogLineTimeDisplayed()
         {
-            _sut.Open();
+            _powerButton.Press();
+            _timeButton.Press();
+            _startButton.Press();
+
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned on"));
+                x == "Display shows: 01:00"));
+
         }
 
-
         [Test]
-        public void UserInterface_DoorWasOpenIsClosed_TurnOffLightOutput()
+        public void CookController_Stop_LogLinePowerOff()
         {
-            _sut.Open();
-            _sut.Close();
+            //Getting to the right state (Cookingstate)
+            _powerButton.Press();
+            _timeButton.Press();
+            _startButton.Press();
 
+            //Calling stop on the cookingController
+            _cookController.Stop();
+            
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned off"));
+                x == "PowerTube turned off"));
         }
     }
 }

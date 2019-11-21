@@ -25,7 +25,11 @@ namespace Microwave.Test.Integration
         private PowerTube _powerTube;
         private ITimer _timer;
 
-        //private IButton _button;
+
+        //private IButton _powerButton;
+        //private IButton _timeButton;
+        //private IButton _startCancelButton;
+        //private UserInterface _userInterface;
 
         [SetUp]
         public void Setup()
@@ -37,7 +41,10 @@ namespace Microwave.Test.Integration
             _powerTube = new PowerTube(_output);
             _sut = new CookController(_timer,_display,_powerTube);
 
-            //_button = Substitute.For<IButton>();
+            //_powerButton = Substitute.For<IButton>();
+            //_timeButton = Substitute.For<IButton>();
+            //_startCancelButton = Substitute.For<IButton>();
+            //_userInterface = new UserInterface(_powerButton, _timeButton, _startCancelButton, _door, _display, _light, _cookController);
 
             //Testing timerTickEvents
             //_receivedEventArgs = null;
@@ -65,12 +72,6 @@ namespace Microwave.Test.Integration
         [Test]
         public void PowerTube_StartCooking_PowerOutputted()
         {
-            //_button.Pressed += Raise.EventWith(EventArgs.Empty);
-            //_button.Pressed += Raise.EventWith(EventArgs.Empty);
-            //_button.Pressed += Raise.EventWith(EventArgs.Empty);
-            //_button.Pressed += Raise.EventWith(EventArgs.Empty);
-            //_button.Pressed += Raise.EventWith(EventArgs.Empty);
-
             _sut.StartCooking(50, 0);
 
             //Assert
