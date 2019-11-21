@@ -2,17 +2,20 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using MicrowaveOvenClasses.Boundary;
 using MicrowaveOvenClasses.Controllers;
 using MicrowaveOvenClasses.Interfaces;
 using NSubstitute;
 using NUnit.Framework;
+using NUnit.Framework.Internal;
+using Timer = MicrowaveOvenClasses.Boundary.Timer;
 
 namespace Microwave.Test.Integration
 {
     [TestFixture]
-    public class IT4_CookController
+    public class IT4a_CookController
     {
         private CookController _sut;
 
@@ -20,39 +23,30 @@ namespace Microwave.Test.Integration
 
         private Display _display;
         private PowerTube _powerTube;
-        private ITimer _timer;
+        private Timer _timer;
 
         [SetUp]
         public void Setup()
         {
-            _timer = Substitute.For<ITimer>();
+            _timer = new Timer();
             _output = Substitute.For<IOutput>();
 
             _display = new Display(_output);
             _powerTube = new PowerTube(_output);
-            _sut = new CookController(_timer, _display, _powerTube);
+            _sut = new CookController(_timer,_display,_powerTube);
         }
 
+        //Testing time and display at the same time
         [Test]
-        public void PowerTube_StartCooking_PowerOutputted()
+        public void Timer_TimerTickEventRaised_EventRaised()
         {
-            _sut.StartCooking(50, 0);
+            ManualResetEvent pause = new ManualResetEvent(false);
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "PowerTube works with 50 %"));
-        }
-
-        [Test]
-        public void PowerTube_CookingStatedStoppedPowerTurnedOff_PowerOffOutputted()
-        {
+            _timer.TimerTick += (sender, args) => pause.Set();
             _sut.StartCooking(50, 5);
-            _sut.Stop();
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "PowerTube turned off"));
+            // wait for a tick, but no longer
+            Assert.That(pause.WaitOne(1100));
         }
-
     }
 }
