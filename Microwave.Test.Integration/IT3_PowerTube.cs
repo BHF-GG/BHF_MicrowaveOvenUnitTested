@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,12 +25,37 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
+        public void TurnOn_CorrectOutput()
+        {
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
+
+                _powerTube.TurnOn(50);
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("PowerTube works with 50 %\r\n"));
+        }
+
+        [Test]
         public void TurnOff_WasOn_CorrectOutput()
         {
-            _powerTube.TurnOn(50);
-            _powerTube.TurnOff();
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
-            Assert.That(_output.OutTextTest,Is.EqualTo("PowerTube turned off"));
+                _powerTube.TurnOn(50);
+                _powerTube.TurnOff();
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+
+            Assert.That(consoleOutput, Is.EqualTo("PowerTube works with 50 %\r\nPowerTube turned off\r\n"));
         }
 
    

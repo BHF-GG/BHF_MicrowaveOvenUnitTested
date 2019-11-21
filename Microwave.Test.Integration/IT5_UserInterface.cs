@@ -33,7 +33,7 @@ namespace Microwave.Test.Integration
         [SetUp]
         public void Setup()
         {
-            
+
             _output = Substitute.For<IOutput>();
 
             _display = new Display(_output);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,53 +22,78 @@ namespace Microwave.Test.Integration
         public void SetUp()
         {
             //Testing with a concrete object instead of Substitute
-            _output = Substitute.For<Output>();
+            _output = Substitute.For<IOutput>();
             _sut = new Light(_output);
         }
 
         [Test]
         public void LightTurnsOn_WasOff_CorrectOutPutString()
         {
-            _sut.TurnOn();
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned on"));
+                _sut.TurnOn();
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("Light is turned on\r\n"));
         }
 
         [Test]
         public void LightTurnsOff_WasOn_CorrectOutPutString()
         {
-            _sut.TurnOn();
-            _sut.TurnOff();
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned off"));
+                _sut.TurnOn();
+                _sut.TurnOff();
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("Light is turned on\r\nLight is turned off\r\n"));
         }
 
         [Test]
         public void TurnOn_WasOn_CorrectOutput()
         {
-            _sut.TurnOn();
-            _sut.TurnOn();
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned on"));
+                _sut.TurnOn();
+                _sut.TurnOn();
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("Light is turned on\r\n"));
         }
 
         [Test]
         public void TurnOff_WasOff_CorrectOutput()
         {
-            //Have to turn on, and then turn off twice to check this - because isOn (boolean) is set to false at start
-            _sut.TurnOn();
-            _sut.TurnOff();
-            _sut.TurnOff();
+            string consoleOutput;
+            using (StringWriter stringWriter = new StringWriter())
+            {
+                Console.SetOut(stringWriter);
 
-            //Assert
-            _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Light is turned off"));
+                //Have to turn on, and then turn off twice to check this - because isOn (boolean) is set to false at start
+                _sut.TurnOn();
+                _sut.TurnOff();
+                _sut.TurnOff();
+
+                consoleOutput = stringWriter.ToString();
+            }
+
+            Assert.That(consoleOutput, Is.EqualTo("Light is turned on\r\nLight is turned off\r\n"));
+
         }
     }
 }

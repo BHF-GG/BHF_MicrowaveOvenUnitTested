@@ -19,7 +19,7 @@ namespace Microwave.Test.Integration
         [SetUp]
         public void SetUp()
         {
-            _output = new Output();
+            _output = Substitute.For<IOutput>();
             _sut = new Display(_output);
         }
 
@@ -29,7 +29,9 @@ namespace Microwave.Test.Integration
         public void Display_ShowTimeOutputsExpected(int min, int sec, string expected)
         {
             _sut.ShowTime(min,sec);
-           Assert.That(_output.OutTextTest,Is.EqualTo("Display shows: " +expected));
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Display shows: " + expected));
+
         }
 
         [TestCase(2,"2")]
@@ -38,14 +40,17 @@ namespace Microwave.Test.Integration
         public void ShowPowerOutputsExpected(int power,string expected)
         {
             _sut.ShowPower(power);
-            Assert.That(_output.OutTextTest, Is.EqualTo("Display shows: " + expected + " W"));
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Display shows: " + expected + " W"));
+
         }
 
         [Test]
         public void ClearDisplaysCorrectString()
         {
             _sut.Clear();
-            Assert.That(_output.OutTextTest, Is.EqualTo("Display cleared"));
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Display cleared"));
         }
     }
 }

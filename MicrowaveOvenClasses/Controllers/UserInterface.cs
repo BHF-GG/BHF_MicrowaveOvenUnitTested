@@ -39,6 +39,7 @@ namespace MicrowaveOvenClasses.Controllers
             myCooker = cooker;
             myLight = light;
             myDisplay = display;
+            myCooker.SetUi(this);
         }
 
         public void OnPowerPressed(object sender, EventArgs e)
