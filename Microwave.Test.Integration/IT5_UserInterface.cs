@@ -84,7 +84,7 @@ namespace Microwave.Test.Integration
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
                 x == "Display shows: 50 W"));
-        }
+        } 
 
         [Test]
         public void Display_OnPowerPressedEventThreeTimes_DisplayShowsPower_OK()
