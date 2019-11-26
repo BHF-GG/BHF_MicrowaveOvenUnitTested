@@ -36,7 +36,7 @@ namespace Microwave.Test.Integration
         [Test]
         public void PowerTube_StartCooking_PowerOutputted()
         {
-            _sut.StartCooking(50, 0);
+            _sut.StartCooking(350, 0);
 
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>

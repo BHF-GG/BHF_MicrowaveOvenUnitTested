@@ -96,7 +96,7 @@ namespace Microwave.Test.Integration
 
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "Display shows: 5 W"));
+                x == "Display shows: 150 W"));
         }
 
         [Test]
@@ -145,7 +145,7 @@ namespace Microwave.Test.Integration
 
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "PowerTube works with 50 %"));
+                x == "PowerTube works with 7.14 %"));
         }
 
         [Test]
