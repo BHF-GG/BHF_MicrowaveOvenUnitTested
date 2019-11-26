@@ -74,5 +74,18 @@ namespace Microwave.Test.Integration
             _output.Received().OutputLine(Arg.Is<string>(x =>
                 x == "PowerTube turned off"));
         }
+
+        //Testing time and display at the same time
+        [Test]
+        public void CookController_HandleTimerTicks_TimeOutputted()
+        {
+            _cookController.StartCooking(50, 2);
+
+            System.Threading.Thread.Sleep(2100);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Display shows: 00:00"));
+        }
     }
 }
