@@ -22,9 +22,7 @@ namespace Microwave.Test.Unit
         [Test]
         public void TurnOn_WasOff_CorrectOutput()
         {
-            uut.TurnOn(50);
-
-
+            uut.TurnOn(350);
             output.Received().OutputLine(Arg.Is<string>(str => str.Contains("50 %")));
         }
 

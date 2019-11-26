@@ -39,9 +39,7 @@ namespace Microwave.Application
             // Simulate a simple sequence
 
             powerButton.Press();
-
             timeButton.Press();
-
             startCancelButton.Press();
 
             // The simple sequence should now run

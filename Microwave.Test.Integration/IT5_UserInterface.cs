@@ -87,6 +87,19 @@ namespace Microwave.Test.Integration
         }
 
         [Test]
+        public void Display_OnPowerPressedEventThreeTimes_DisplayShowsPower_OK()
+        {
+            //Act
+            _powerButton.Pressed += Raise.EventWith(EventArgs.Empty);
+            _powerButton.Pressed += Raise.EventWith(EventArgs.Empty);
+            _powerButton.Pressed += Raise.EventWith(EventArgs.Empty);
+
+            //Assert
+            _output.Received().OutputLine(Arg.Is<string>(x =>
+                x == "Display shows: 5 W"));
+        }
+
+        [Test]
         public void Display_OnTimePressedEvent_DisplayShowsTime_OK()
         {
             //Setup
