@@ -27,6 +27,13 @@ namespace Microwave.Test.Unit
         }
 
         [Test]
+        public void TurnOnWithMaxPower_WasOff_CorrectOutput()
+        {
+            uut.TurnOn(700);
+            output.Received().OutputLine(Arg.Is<string>(str => str.Contains("100 %")));
+        }
+
+        [Test]
         public void TurnOff_WasOn_CorrectOutput()
         {
             uut.TurnOn(50);
