@@ -145,7 +145,7 @@ namespace Microwave.Test.Integration
 
             //Assert
             _output.Received().OutputLine(Arg.Is<string>(x =>
-                x == "PowerTube works with 7.14 %"));
+                x == "PowerTube works with 7,14 %"));
         }
 
         [Test]
