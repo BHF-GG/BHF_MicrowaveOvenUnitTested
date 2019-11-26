@@ -32,7 +32,7 @@ namespace Microwave.Test.Integration
             {
                 Console.SetOut(stringWriter);
 
-                _powerTube.TurnOn(50);
+                _powerTube.TurnOn(350);
 
                 consoleOutput = stringWriter.ToString();
             }
@@ -48,7 +48,7 @@ namespace Microwave.Test.Integration
             {
                 Console.SetOut(stringWriter);
 
-                _powerTube.TurnOn(50);
+                _powerTube.TurnOn(350);
                 _powerTube.TurnOff();
 
                 consoleOutput = stringWriter.ToString();
